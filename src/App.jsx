@@ -90,8 +90,8 @@ function App() {
 
   useEffect(() => {
     async function fetchTodos() {
+      setLoading(true);
       try {
-        setLoading(true);
         const response = await fetch(`${API_URL}/todos`);
         const data = await response.json();
         setTodos(data);
