@@ -8,6 +8,7 @@ function App() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   async function handleAdd(input) {
     try {
@@ -90,18 +91,25 @@ function App() {
   useEffect(() => {
     async function fetchTodos() {
       try {
+        setLoading(true);
         const response = await fetch(`${API_URL}/todos`);
         const data = await response.json();
         setTodos(data);
       } catch (err) {
         console.error("Error fetching data: ", err);
+      } finally{
+        setLoading(false);
       }
     }
     fetchTodos();
   }, []);
 
+  if(loading){
+    return <p>Loading...</p>
+  }
+
   return (
-    <>
+    <div>
       <h1>TODO APP</h1>
       <TodoForm onAdd={handleAdd}></TodoForm>
 
@@ -118,7 +126,7 @@ function App() {
           {todos.filter((todo) => !todo.completed).length} tasks remaining
         </p>
       )}
-    </>
+    </div>
   );
 }
 
